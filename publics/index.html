@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Discover the best vehicles at Dinga World. Browse our selection of popular vehicles and find your next car today.">
+        <meta name="keywords" content="Dinga World, cars, vehicles, dealership">
+        <title>Dinga World</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body class="multi-vendor">
+ <!-- Header -->
+ <section class="header">
+    <div id="menu-btn" class="fas fa-bars fa-3x"></div>
+    <a href="#" class="logo">Dinga <span>World</span></a>
+    <nav class="navbar">
+        <a href="index.html">Sell your car</a>
+        <a href="DingaWorld.html" class="active">Dinga World</a>
+        <a href="import on stock.html">Import on stock</a>
+        <a href="blog.html">Blog</a>
+    </nav>
+    <div id="login-btn">
+        <button class="btn">Login</button>
+        <i class='far fa-user'></i>
+    </div>
+</section>
+    <section class="login-form-container">
+        <span class="fas fa-times fa-2x" id="close-login-form"></span>
+        <form action="account">
+            <h3>user login</h3>
+            <input type="email" placeholder="email" class="box">
+            <input type="password" placeholder="password" class="box">
+            <p>Forgot your password <a href="#">click here</a></p>
+            <input type="submit" value="login now" class="btn">
+            <p>or login with</p>
+            <div class="buttons">
+                <a href="#" class="btn">google</a>
+                <a href="#" class="btn">facebook</a>
+            </div>
+            <p>don't have an account? <a href="#">create one</a></p>
+        </form>
+    </section>
+    <!-- home -->
+    <section class="home" id="Home">
+        <!-- <h1 class="home-parallax" data-speed="-2">
+            it's a <span>dinga</span> world
+        </h1> -->
+        <img class="home-parallax" data-speed="-2" src="Assets/banner dinga world 3.png" alt="">
+        <p>Need to sell your car? <br> <span>Its now easy,</span> <br>click the button below.</p>
+        <a href="#" class="btn" id="btn1">Sell your car</a>
+        <form id="sell-car-form" action="http://localhost:3000/submit-car-details" method="POST" enctype="multipart/form-data">
+            <button type="button" class="close-btn" id="close-form">&times;</button>
+            <h3>Car Details</h3>
+            <input type="text" name="carBrand" placeholder="Car Brand" class="box">
+            <input type="text" name="carModel" placeholder="Car Model" class="box">
+            <input type="text" name="engineCapacity" placeholder="Engine Capacity" class="box">
+            <input type="text" name="transmission" placeholder="Transmission" class="box">
+            <input type="text" name="drivetrain" placeholder="Drivetrain" class="box">
+            <input type="text" name="carYear" placeholder="Car Year" class="box">
+            <input type="text" name="bodyType" placeholder="Body Type" class="box">
+            <label for="carPhotos">Upload Car Photos:</label>
+            <input type="file" id="carPhotos" name="carPhotos" accept="image/*" multiple required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="feedback-message" style="display: none;">
+            Car submitted successfully!
+          </div>
+          <div id="form-details"></div>
+    </section>
+    <section class="approved" id="approved">
+        <h1 class="heading"> <span>Approved</span> Cars</h1>
+        <div class="swiper approved-slider">
+            <div class="swiper-wrapper" id="approved-car-list">
+                <!-- Dynamic car details will be inserted here by JavaScript -->
+            </div>
+    </section>
+    <section class="car-search">
+        <h1>Lets find a <span>car</span></h1>
+        <div id="search-form">
+    <input type="text" id="car-brand" placeholder="Car Brand">
+    <input type="text" id="car-model" placeholder="Car Model">
+    <select id="transmission">
+        <option value="">Transmission</option>
+        <option value="automatic">Automatic</option>
+        <option value="manual">Manual</option>
+    </select>
+    <input type="number" id="min-year" placeholder="Min Year">
+    <input type="number" id="max-year" placeholder="Max Year">
+    <input type="number" id="min-price" placeholder="Min Price">
+    <input type="number" id="max-price" placeholder="Max Price">
+    <button type="button" id="search-button">Search</button>
+</div>
+
+<!-- Search Results Section -->
+<div id="search-results">
+    <!-- Dynamic content will be populated here -->
+</div>
+</section>
+    
+   <!-- sell your car -->
+    <!-- <section class="featured" id="Featured">
+        <h1 class="heading"> <span>Sell</span> your car</h1>
+        <div class="swiper featured-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide box">
+                    <img src="Assets/2017 Volkswagen Touareg.webp" alt="">
+                    <h3>Volkswagen <br> Touareg</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/2017 Porsche Cayenne.webp" alt="">
+                    <h3>Porsche <br> Cayenne</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/2017 Volvo S60.webp" alt="">
+                    <h3>Volvo <br>S60</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/2024 INFINITI QX80.webp" alt="">
+                    <h3>INFINITI <br> QX80</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="swiper featured-slider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide box">
+                    <img src="Assets/2017 volvo xc90.webp" alt="">
+                    <h3>volvo <br> xc90</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/2018 Mitsubishi Outlander PHEV.webp" alt="">
+                    <h3>Mitsubishi <br>Outlander</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/2021 Lexus LX 570.webp" alt="">
+                    <h3>Lexus <br> LX 570</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+                <div class="swiper-slide box">
+                    <img src="Assets/cx5 2017.webp" alt="">
+                    <h3>Mazda <br>CX5</h3>
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star-half-stroke"></i>
+                    </div>
+                    <div class="price"><span>Kshs:</span> XXXXX</div>
+                    <a href="#" class="btn">Show More</a>
+                </div>
+            </div>
+            <div class="sell">
+                <a href="#" class="btn center-btn">Sell your car</a>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section> -->
+     <!-- footer -->  
+     <section class="footer">
+        <div class="social">
+            <h1>Social</h1>
+            <div class="link">
+            <a href="#"><i class='bx bxl-facebook-circle'></i></a>
+            <a href="#"><i class='bx bx-x'></i></a>
+            <a href="#"><i class='bx bxl-instagram'></i></a>
+            <a href="#"><i class='bx bxl-youtube'></i></a>
+            <a href="#"><i class='bx bxl-pinterest'></i></a>
+            </div>
+        </div>
+        <div class="copyright">
+            <h1> &#169;</h1>
+            <p>rights reserved <br> by Dinga World Ltd
+            </p>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
