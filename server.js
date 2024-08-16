@@ -82,16 +82,15 @@ app.post('/approve-car', (req, res) => {
 // Route to submit a quote request
 app.post('/submit-quote', (req, res) => {
     const { carId, name, email, phone } = req.body;
-    // Log received data
-    console.log("Received quote request:", req.body);
-        // Store the quote with a timestamp
-        const newQuote = { carId: car, name, email, phone, timestamp: new Date() };
-        quotes.push(newQuote);
+
+    // Store the quote with a timestamp
+    const newQuote = { carId, name, email, phone, timestamp: new Date() };
+    quotes.push(newQuote);
+
+    console.log('Quotes Array:', quotes); // Log the quotes array to check if data is being stored
     
-        console.log('Quotes Array:', quotes); // Log the quotes array to check if data is being stored
-    
-        res.status(200).json({ message: 'Quote request submitted successfully!' });
-    });
+    res.status(200).json({ message: 'Quote request submitted successfully!' });
+});
 
     // Log the stored quotes array
     console.log("Updated quotes array:", quotes);
