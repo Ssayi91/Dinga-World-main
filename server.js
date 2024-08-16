@@ -84,11 +84,6 @@ app.post('/submit-quote', (req, res) => {
     const { carId, name, email, phone } = req.body;
     // Log received data
     console.log("Received quote request:", req.body);
-
-    // Store the quote with a timestamp
-    app.post('/submit-quote', (req, res) => {
-        const { car, name, email, phone } = req.body;
-    
         // Store the quote with a timestamp
         const newQuote = { carId: car, name, email, phone, timestamp: new Date() };
         quotes.push(newQuote);
@@ -102,7 +97,6 @@ app.post('/submit-quote', (req, res) => {
     console.log("Updated quotes array:", quotes);
 
     res.status(200).json({ message: 'Quote request submitted successfully!' });
-});
 
 app.get('/get-quotes', (req, res) => {
     console.log("Sending quotes to admin page:", quotes); // Debug log
