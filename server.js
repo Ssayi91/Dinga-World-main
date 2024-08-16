@@ -92,15 +92,11 @@ app.post('/submit-quote', (req, res) => {
     res.status(200).json({ message: 'Quote request submitted successfully!' });
 });
 
-    // Log the stored quotes array
-    console.log("Updated quotes array:", quotes);
-
-    res.status(200).json({ message: 'Quote request submitted successfully!' });
-
 app.get('/get-quotes', (req, res) => {
     console.log("Sending quotes to admin page:", quotes); // Debug log
     res.json(quotes); // Send all quotes to the admin page
-})
+});
+
 // Route to search for cars based on query parameters
 app.get('/api/search', (req, res) => {
     const { brand, model, transmission, minYear, maxYear, minPrice, maxPrice } = req.query;
@@ -122,7 +118,6 @@ app.get('/api/search', (req, res) => {
     // Send the filtered results back to the frontend
     res.json(results);
 });
-
 
 // Route to serve the index.html file
 app.get('/', (req, res) => {
