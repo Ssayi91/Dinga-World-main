@@ -4,6 +4,15 @@ const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+
+
+const mongoURI = process.env.MONGO_URI; // Make sure this is set correctly
+
+if (!mongoURI) {
+  console.error('MongoDB URI not defined!');
+  process.exit(1);
+}
+
     mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
