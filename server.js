@@ -2,47 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
-const mongoose = require('mongoose');
 
-// Initialize express app
 const app = express();
 const port = 3000;
 
-// MongoDB Atlas connection string
-const mongoDBUri = 'mongodb+srv://sonnysayi:xX33h5qEhrskQIRC@dingaworld.pmg8k.mongodb.net/?retryWrites=true&w=majority&appName=Dingaworld';
+// Initialize quotes array
+const quotes = [];
 
-// Connect to MongoDB
-mongoose.connect(mongoDBUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
-
-// Define schemas and models
-const carSchema = new mongoose.Schema({
-    carBrand: String,
-    carModel: String,
-    carYear: Number,
-    carPrice: Number,
-    transmission: String,
-    carPhotos: [String], // Array of photo URLs
-    approved: { type: Boolean, default: false }
-});
-
-const Car = mongoose.model('Car', carSchema);
-
-const quoteSchema = new mongoose.Schema({
-    carId: mongoose.Schema.Types.ObjectId,
-    name: String,
-    email: String,
-    phone: String,
-    timestamp: { type: Date, default: Date.now }
-});
-
-const Quote = mongoose.model('Quote', quoteSchema);
-
-// Middleware
+// Middleware for parsing form data
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -64,104 +31,120 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// Temporary store for submitted details
+const submittedDetails = [];
+
 // Route to submit car details
-app.post('/submit-car-details', upload.array('carPhotos', 12), async (req, res) => {
+app.post('/submit-car-details', upload.array('carPhotos', 12), (req, res) => {
     const details = req.body;
     const files = req.files;
 
+    // Combine form data with file paths
     const fullDetails = {
         ...details,
-        carPhotos: files.map(file => '/uploads/' + file.filename),
-        approved: false
+        carPhotos: files.map(file => '/uploads/' + file.filename), // Include file paths
+        approved: false // Initialize as not approved
     };
 
-    try {
-        const car = new Car(fullDetails);
-        await car.save();
-        res.json({ message: 'Car details submitted successfully', formDetails: fullDetails });
-    } catch (err) {
-        res.status(500).json({ message: 'Error saving car details', error: err });
-    }
+    submittedDetails.push(fullDetails); // Save combined details for admin review
+    res.json({ 
+        message: 'Car details submitted successfully', 
+        formDetails: fullDetails 
+    });
 });
 
 // Route to fetch car details for the admin dashboard
-app.get('/admin-dashboard', async (req, res) => {
-    try {
-        const cars = await Car.find();
-        res.json(cars);
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching car details', error: err });
-    }
+app.get('/admin-dashboard', (req, res) => {
+    res.json(submittedDetails); // Send all submitted details to the admin dashboard
 });
 
 // Route to fetch approved car details for the frontend
-app.get('/approved-cars', async (req, res) => {
-    try {
-        const approvedCars = await Car.find({ approved: true });
-        res.json(approvedCars);
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching approved cars', error: err });
-    }
+app.get('/approved-cars', (req, res) => {
+    const approvedCars = submittedDetails.filter(detail => detail.approved);
+    res.json(approvedCars); // Send only approved car details
 });
 
 // Route to approve a car detail
-app.post('/approve-car', async (req, res) => {
-    const { carId } = req.body;
-    try {
-        const car = await Car.findById(carId);
-        if (car) {
-            car.approved = true;
-            await car.save();
-            res.json({ message: 'Car approved' });
-        } else {
-            res.status(404).json({ message: 'Car not found' });
-        }
-    } catch (err) {
-        res.status(500).json({ message: 'Error approving car', error: err });
-    }
-});
+app.post('/approve-car', (req, res) => {
+    const { carName } = req.body;
+    // Find the car by carName
+    const car = submittedDetails.find(detail => `${detail.carBrand} ${detail.carModel}` === carName);
 
-// Route to submit a quote request
-app.post('/submit-quote', async (req, res) => {
-    const { carId, name, email, phone } = req.body;
-
-    try {
-        const newQuote = new Quote({ carId, name, email, phone });
-        await newQuote.save();
-        res.status(200).json({ message: 'Quote request submitted successfully!' });
-    } catch (err) {
-        res.status(500).json({ message: 'Error submitting quote request', error: err });
-    }
-});
-
-// Route to get quotes
-app.get('/get-quotes', async (req, res) => {
-    try {
-        const quotes = await Quote.find();
-        res.json(quotes);
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching quotes', error: err });
+    if (car) {
+        // Mark the car as approved
+        car.approved = true;
+        res.json({ message: `Car ${carName} approved` });
+    } else {
+        res.status(404).json({ message: 'Car not found' });
     }
 });
 
 // Route to search for cars based on query parameters
-app.get('/api/search', async (req, res) => {
+app.get('/api/search', (req, res) => {
     const { brand, model, transmission, minYear, maxYear, minPrice, maxPrice } = req.query;
 
-    try {
-        const results = await Car.find({
-            $and: [
-                { carBrand: { $regex: brand, $options: 'i' } },
-                { carModel: { $regex: model, $options: 'i' } },
-                { transmission: { $regex: transmission, $options: 'i' } },
-                { carYear: { $gte: minYear || 0, $lte: maxYear || Infinity } },
-                { carPrice: { $gte: minPrice || 0, $lte: maxPrice || Infinity } }
-            ]
-        });
-        res.json(results);
-    } catch (err) {
-        res.status(500).json({ message: 'Error searching for cars', error: err });
+    // Create a dynamic query object
+    const query = {};
+
+    if (brand) {
+        query.carBrand = { $regex: brand, $options: 'i' }; // Case-insensitive search
     }
+    if (model) {
+        query.carModel = { $regex: model, $options: 'i' };
+    }
+    if (transmission) {
+        query.transmission = { $regex: transmission, $options: 'i' };
+    }
+    if (minYear || maxYear) {
+        query.carYear = {};
+        if (minYear) query.carYear.$gte = minYear;
+        if (maxYear) query.carYear.$lte = maxYear;
+    }
+    if (minPrice || maxPrice) {
+        query.carPrice = {};
+        if (minPrice) query.carPrice.$gte = minPrice;
+        if (maxPrice) query.carPrice.$lte = maxPrice;
+    }
+
+    // Filter the submittedDetails array based on the query object
+    const results = submittedDetails.filter(car => {
+        for (let key in query) {
+            if (typeof query[key] === 'object' && '$regex' in query[key]) {
+                // Handle regex matching for strings
+                const regex = new RegExp(query[key].$regex, query[key].$options);
+                if (!regex.test(car[key])) {
+                    return false;
+                }
+            } else if (typeof query[key] === 'object') {
+                // Handle numeric range filtering
+                if ((query[key].$gte && car[key] < query[key].$gte) ||
+                    (query[key].$lte && car[key] > query[key].$lte)) {
+                    return false;
+                }
+            } else if (car[key] !== query[key]) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    res.json(results);
+});
+
+
+// Route to submit a quote request
+app.post('/submit-quote', (req, res) => {
+    const { carId, name, email, phone } = req.body;
+
+    // Store the quote with a timestamp
+    quotes.push({ carId, name, email, phone, timestamp: new Date() });
+
+    res.status(200).json({ message: 'Quote request submitted successfully!' });
+});
+
+// Route to fetch quotes for the admin page
+app.get('/get-quotes', (req, res) => {
+    res.json(quotes); // Send all quotes to the admin page
 });
 
 // Route to serve the index.html file

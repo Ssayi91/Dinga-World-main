@@ -183,7 +183,7 @@ function approveCar(carName) {
 }
 // search button function
 
-document.getElementById('search-button').addEventListener('click', function() {
+document.getElementById('search-button').addEventListener('click', async() => {
     // Collect input values
     const brand = document.getElementById('car-brand').value.trim();
     const model = document.getElementById('car-model').value.trim();
@@ -204,40 +204,35 @@ document.getElementById('search-button').addEventListener('click', function() {
     if (minPrice) queryParams.append('minPrice', minPrice);
     if (maxPrice) queryParams.append('maxPrice', maxPrice);
 
-    // Fetch search results from the backend
-    fetch(`/api/search?${queryParams.toString()}`)
-        .then(response => {
-            console.log('Response status:', response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Fetched data:', data);
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = ''; // Clear previous results
+   // Fetch search results from the backend
+   try {
+    const response = await fetch(`/api/search?${queryParams.toString()}`);
+    const data = await response.json();
+    const resultsContainer = document.getElementById('search-results');
+    resultsContainer.innerHTML = ''; // Clear previous results
 
-            if (!Array.isArray(data) || data.length === 0) {
-                resultsContainer.innerHTML = '<p>No results found.</p>';
-                return;
-            }
+    if (!Array.isArray(data) || data.length === 0) {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+        return;
+    }
 
-            data.forEach(car => {
-                const carElement = document.createElement('div');
-                carElement.classList.add('car-result');
-                carElement.innerHTML = `
-                    <h3>${car.carBrand} ${car.carModel}</h3>
-                    <p>Year: ${car.carYear}</p>
-                    <p>Price: $${car.carPrice}</p>
-                    <p>Transmission: ${car.transmission}</p>
-                    <div class="car-images">
-                        ${car.carPhotos.map(photo => `<img src="${photo}" alt="${car.carBrand} ${car.carModel}">`).join('')}
-                    </div>
-                `;
-                resultsContainer.appendChild(carElement);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching search results:', error);
-        });
+    data.forEach(car => {
+        const carElement = document.createElement('div');
+        carElement.classList.add('car-result');
+        carElement.innerHTML = `
+            <h3>${car.carBrand} ${car.carModel}</h3>
+            <p>Year: ${car.carYear}</p>
+            <p>Price: $${car.carPrice}</p>
+            <p>Transmission: ${car.transmission}</p>
+            <div class="car-images">
+                ${car.carPhotos.map(photo => `<img src="${photo}" alt="${car.carBrand} ${car.carModel}">`).join('')}
+            </div>
+        `;
+        resultsContainer.appendChild(carElement);
+    });
+} catch (error) {
+    console.error('Error fetching search results:', error);
+}
 });
 
 
