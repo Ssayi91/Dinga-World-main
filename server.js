@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (e.g., HTML, CSS, JS) from the "publics" directory
-app.use(express.static('publics'));
+app.use(express.static(path.join((__dirname, 'publics'))));
 
 // Serve uploaded images
 app.use('/uploads', express.static('uploads'));
@@ -171,6 +171,7 @@ app.use((req, res, next) => {
 });
 
 // Start the server
+const PORT = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running at http://192.168.1.100:${port}`);
 });
