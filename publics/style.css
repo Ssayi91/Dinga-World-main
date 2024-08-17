@@ -1120,6 +1120,7 @@ html::-webkit-scrollbar-thumb{
 .multi-vendor .approved {
     padding: 20px;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center
