@@ -140,7 +140,7 @@ fetch('https://dinga-world-main.onrender.com/get-quotes')
 
 // Function to handle car approval
 function approveCar(carName) {
-    fetch('https:dinga-world-main.onrender.com/approve-car', {  // Replace with IP address
+    fetch('https://dinga-world-main.onrender.com/approve-car', {  
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
