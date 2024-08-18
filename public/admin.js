@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch car details for the admin dashboard
-    fetch('http://dinga-world-main.onrender.com/admin-dashboard')
+    fetch('https://dinga-world-main.onrender.com/admin-dashboard')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
