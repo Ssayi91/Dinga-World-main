@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (e.g., HTML, CSS, JS) from the "publics" directory
-app.use(express.static(path.join((__dirname, 'publics'))));
+app.use(express.static(path.join((__dirname, 'public'))));
 
 // Serve uploaded images
 app.use('/uploads', express.static('uploads'));
@@ -169,12 +169,12 @@ app.get('/get-quotes', (req, res) => {
 
 // Route to serve the index.html file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'publics', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Route to serve the admin.html file
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'publics', 'admin.html'));
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 // Error handling for unsupported routes
