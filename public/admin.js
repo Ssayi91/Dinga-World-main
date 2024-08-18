@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Fetch car details for the admin dashboard
-    fetch('dinga-world-main.onrender.com/admin-dashboard')
+    fetch('http://dinga-world-main.onrender.com/admin-dashboard')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             detailsList.innerHTML = '<p>Failed to load car details. Please try again later.</p>';
         });
 // Fetch and display quotes
-fetch('dinga-world-main.onrender.com/get-quotes')
+fetch('https://dinga-world-main.onrender.com/get-quotes')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
@@ -140,7 +140,7 @@ fetch('dinga-world-main.onrender.com/get-quotes')
 
 // Function to handle car approval
 function approveCar(carName) {
-    fetch('dinga-world-main.onrender.com/approve-car', {  // Replace with IP address
+    fetch('https:dinga-world-main.onrender.com/approve-car', {  // Replace with IP address
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
