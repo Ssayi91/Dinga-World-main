@@ -34,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (e.g., HTML, CSS, JS) from the "publics" directory
+// Serve static files (e.g., HTML, CSS, JS) from the "public" directory
 app.use(express.static(path.join((__dirname, 'public'))));
 
 // Serve uploaded images
