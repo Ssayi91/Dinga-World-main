@@ -161,6 +161,8 @@ html::-webkit-scrollbar-thumb{
 .header{
     position: fixed;
     top: 0; 
+    left: 0;
+    right: 0;
     width: 100%;
     z-index: 999;
     /* background: var(--main-color); */
@@ -168,10 +170,7 @@ html::-webkit-scrollbar-thumb{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 3rem 9%;
-    /* border-bottom: 2px solid black; */
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    padding: 18px 9%;
     box-shadow: 4px 4px 20px rgba(31, 5, 3, 0.795);
 }
 .header .logo{
