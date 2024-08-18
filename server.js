@@ -5,26 +5,24 @@ const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-
-
-
-const mongoURI = process.env.MONGO_URI; // Make sure this is set correctly
+// MongoDB URI from environment variables
+const mongoURI = process.env.MONGO_URI;
 
 if (!mongoURI) {
-  console.error('MongoDB URI not defined!');
-  process.exit(1);
+    console.error('MongoDB URI not defined!');
+    process.exit(1);
 }
 
-    mongoose.connect(mongoURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => console.log('Connected to MongoDB'))
-      .catch(err => console.error('Could not connect to MongoDB', err));
+// Connect to MongoDB
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('Could not connect to MongoDB', err));
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 
 // Initialize quotes array
 const quotes = [];
@@ -35,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files (e.g., HTML, CSS, JS) from the "public" directory
-app.use(express.static(path.join((__dirname, 'public'))));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve uploaded images
 app.use('/uploads', express.static('uploads'));
@@ -126,31 +124,35 @@ app.get('/api/search', (req, res) => {
         if (maxPrice) query.carPrice.$lte = maxPrice;
     }
 
-    // Filter the submittedDetails array based on the query object
-    const results = submittedDetails.filter(car => {
-        for (let key in query) {
-            if (typeof query[key] === 'object' && '$regex' in query[key]) {
-                // Handle regex matching for strings
-                const regex = new RegExp(query[key].$regex, query[key].$options);
-                if (!regex.test(car[key])) {
+    try {
+        // Filter the submittedDetails array based on the query object
+        const results = submittedDetails.filter(car => {
+            for (let key in query) {
+                if (typeof query[key] === 'object' && '$regex' in query[key]) {
+                    // Handle regex matching for strings
+                    const regex = new RegExp(query[key].$regex, query[key].$options);
+                    if (!regex.test(car[key])) {
+                        return false;
+                    }
+                } else if (typeof query[key] === 'object') {
+                    // Handle numeric range filtering
+                    if ((query[key].$gte && car[key] < query[key].$gte) ||
+                        (query[key].$lte && car[key] > query[key].$lte)) {
+                        return false;
+                    }
+                } else if (car[key] !== query[key]) {
                     return false;
                 }
-            } else if (typeof query[key] === 'object') {
-                // Handle numeric range filtering
-                if ((query[key].$gte && car[key] < query[key].$gte) ||
-                    (query[key].$lte && car[key] > query[key].$lte)) {
-                    return false;
-                }
-            } else if (car[key] !== query[key]) {
-                return false;
             }
-        }
-        return true;
-    });
+            return true;
+        });
 
-    res.json(results);
+        res.json(results);
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
-
 
 // Route to submit a quote request
 app.post('/submit-quote', (req, res) => {
@@ -183,7 +185,6 @@ app.use((req, res, next) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running at http://192.168.1.100:${port}`);
+    console.log(`Server running at http://0.0.0.0:${port}`);
 });
