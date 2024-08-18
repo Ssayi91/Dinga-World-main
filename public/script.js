@@ -77,7 +77,7 @@ document.getElementById("sell-car-form").addEventListener("submit", function (ev
 });
 
 // Fetch approved car details from the backend and populate the frontend
-fetch('dinga-world-main.onrender.com/approved-cars')
+fetch('https://dinga-world-main.onrender.com/approved-cars')
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
@@ -100,7 +100,7 @@ fetch('dinga-world-main.onrender.com/approved-cars')
                 <p>Year: ${detail.carYear}</p>
                 <p>Body Type: ${detail.bodyType}</p>
                 <div class="car-photos">
-                    ${detail.carPhotos.map(photo => `<img src="dinga-world-main.onrender.com${photo}" alt="${detail.carModel}" onerror="this.onerror=null; this.src='/images/default-car.jpg'" />`).join('')}
+                    ${detail.carPhotos.map(photo => `<img src="https://dinga-world-main.onrender.com${photo}" alt="${detail.carModel}" onerror="this.onerror=null; this.src='/images/default-car.jpg'" />`).join('')}
                 </div>
                 <button class="get-quote-btn" data-car-name="${detail.carBrand} ${detail.carModel}">Get a Quote</button>
                 <form class="quote-form" style="display: none;">
@@ -156,7 +156,7 @@ function openQuoteForm(carName) {
 // Function to handle car approval
 function approveCar(carName) {
     console.log(`Approving car: ${carName}`); // Log approval action
-    fetch('dinga-world-main.onrender.com/approved-car', {
+    fetch('https://dinga-world-main.onrender.com/approved-car', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
